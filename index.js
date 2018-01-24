@@ -48,6 +48,8 @@ function goBack() {
         console.log(`Num programs: ${body.scratchpads.length}`);
         var lastProgram = body.scratchpads[body.scratchpads.length - 1];
 
+        cursor = body.cursor;
+        
         channel.send({ embed:{
             content: "Wow, I just went back in time and it feels great",
             color: 6080081,
@@ -79,13 +81,12 @@ function goBack() {
                     value: page
                 },
                 {
-                    name: "Current Cursor",
+                    name: "Cursor",
                     value: cursor || "None"
                 }
             ]
         }}).catch(console.error);
         
-        cursor = body.cursor;
         complete = body.complete;
         page += 1;
         
