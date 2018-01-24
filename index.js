@@ -35,21 +35,21 @@ var delay = 500;
 
 function goBack() {
     var apiUrl = `https://www.khanacademy.org/api/internal/scratchpads/top?casing=camel&sort=2&limit=${increment}&subject=all&projection={%22scratchpads%22:[{%22title%22:1,%22url%22:1,%22created%22:1}],%22cursor%22:1}&page=${page}&_=${Date.now()}`;
-    
+
     if(cursor.length > 0){
         apiUrl += `&cursor=${cursor}`;
     }
-    
+
     request(apiUrl, function(err, resp, body) {
         if(err) { console.error(err); }
-        
+
         console.log(`Response returned ${resp.statusCode}`);
         var body = JSON.parse(body);
         console.log(`Num programs: ${body.scratchpads.length}`);
         var lastProgram = body.scratchpads[body.scratchpads.length - 1];
 
         cursor = body.cursor;
-        
+
         channel.send({ embed:{
             content: "Wow, I just went back in time and it feels great",
             color: 6080081,
@@ -73,10 +73,6 @@ function goBack() {
                     value: lastProgram.created
                 },
                 {
-                    name: "Program Number",
-                    value: increment * (page + 1)
-                },
-                {
                     name: "Page",
                     value: page
                 },
@@ -86,10 +82,10 @@ function goBack() {
                 }
             ]
         }}).catch(console.error);
-        
+
         complete = body.complete;
         page += 1;
-        
+
         if(!complete) { setTimeout(goBack, delay); }
         else { channel.send("🎉 WE DID IT! 🎉").catch(console.error); }
     });
