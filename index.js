@@ -34,7 +34,7 @@ client.on("ready", () => {
 var delay = 500;
 
 function goBack() {
-    var apiUrl = `https://www.khanacademy.org/api/internal/scratchpads/top?casing=camel&sort=2&limit=${increment}&subject=all&projection={%22scratchpads%22:[{%22title%22:1,%22url%22:1,%22created%22:1}],%22cursor%22:1}&page=${page}&_=${Date.now()}`;
+    var apiUrl = `https://www.khanacademy.org/api/internal/scratchpads/top?casing=camel&sort=2&limit=${increment}&subject=all&projection={%22scratchpads%22:[{%22title%22:1,%22url%22:1,%22created%22:1,%22thumb%22:1}],%22cursor%22:1}&page=${page}&_=${Date.now()}`;
 
     if(cursor.length > 0){
         apiUrl += `&cursor=${cursor}`;
@@ -49,28 +49,20 @@ function goBack() {
         var lastProgram = body.scratchpads[body.scratchpads.length - 1];
 
         cursor = body.cursor;
-
+        var programDate = lastProgram.created;
         channel.send({ embed:{
-            content: "Wow, I just went back in time and it feels great",
             color: 6080081,
-            description: "Program data",
-            title: "Program",
-            author: {
-                name: client.user.username,
-                icon_url: client.user.avatarURL
+            thumbnail: {
+                url: `https://www.khanacademy.org${lastProgram.thumb}`
             },
             fields: [
                 {
-                    name: "Title",
-                    value: lastProgram.title
-                },
-                {
                     name: "Program Link",
-                    value: `[URL](${lastProgram.url})`
+                    value: `[${lastProgram.title}](${lastProgram.url})`
                 },
                 {
-                    name: "Date Created",
-                    value: lastProgram.created
+                    name: "Timestamp",
+                    value: `${programDate.substring(0,10)} ${programDate.substring(12,19)}`
                 },
                 {
                     name: "Page",
@@ -78,9 +70,14 @@ function goBack() {
                 },
                 {
                     name: "Cursor",
-                    value: cursor || "None"
-                }
-            ]
+                    value: `\`${cursor || "None"}\``
+                },
+            ],
+            timestamp: new Date(),
+            footer: {
+                icon_url: client.user.avatarURL,
+                text: "time machine"
+            }
         }}).catch(console.error);
 
         complete = body.complete;
