@@ -28,6 +28,7 @@ client.on("ready", () => {
     console.log("Discord bot logged in.");
     client.user.setActivity('With time');
     channel = client.channels.get(creds.channel);
+    channel.send("<@237598245596037120> I'm starting up again");
     goBack();
 });
 
@@ -62,7 +63,7 @@ function goBack() {
                 },
                 {
                     name: "Timestamp",
-                    value: `${programDate.substring(0,10)} ${programDate.substring(12,19)}`
+                    value: `${programDate.substring(0,10)} ${programDate.substring(12,19 )}`
                 },
                 {
                     name: "Page",
